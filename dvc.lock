@@ -1,0 +1,90 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/data/preprocess.py
+    deps:
+    - path: ./data/bronze/tennis_atp/atp_matches_2015.csv
+      hash: md5
+      md5: b2ce3147afe0d1d0aaf864a8a1a76519
+      size: 594411
+    - path: ./data/bronze/tennis_atp/atp_matches_2016.csv
+      hash: md5
+      md5: f569f7f113cd57827b330aa0b1399262
+      size: 617639
+    - path: ./data/bronze/tennis_atp/atp_matches_2017.csv
+      hash: md5
+      md5: 79518eee5b6ec8fe15a0a6e7466849fb
+      size: 611335
+    - path: ./data/bronze/tennis_atp/atp_matches_2018.csv
+      hash: md5
+      md5: 8626f0f8003e8346c61fee4640bd2eb7
+      size: 608832
+    - path: ./data/bronze/tennis_atp/atp_matches_2019.csv
+      hash: md5
+      md5: 66900789e95445ddbf373547f03a7aae
+      size: 586038
+    - path: ./data/bronze/tennis_atp/atp_matches_2020.csv
+      hash: md5
+      md5: ad1460838fddbb35c696e062704222fd
+      size: 307237
+    - path: ./data/bronze/tennis_atp/atp_matches_2021.csv
+      hash: md5
+      md5: 573272479332dd5d4e41dc1571510b73
+      size: 572975
+    - path: ./data/bronze/tennis_atp/atp_matches_2022.csv
+      hash: md5
+      md5: 6978170a2f3fda011cf932c01cca4928
+      size: 608213
+    - path: ./data/bronze/tennis_atp/atp_matches_2023.csv
+      hash: md5
+      md5: d996c4bd5a04d57139431e27e110a41e
+      size: 494235
+    - path: ./data/bronze/tennis_odds/2015.xlsx
+      hash: md5
+      md5: 108662cfc3d2b3973ed3f3449cea12c5
+      size: 526784
+    - path: ./data/bronze/tennis_odds/2016.xlsx
+      hash: md5
+      md5: e1cd21645ebff34ca2095b33c892decb
+      size: 546990
+    - path: ./data/bronze/tennis_odds/2017.xlsx
+      hash: md5
+      md5: 24ba08c007d3526e094a4fdec166c439
+      size: 526053
+    - path: ./data/bronze/tennis_odds/2018.xlsx
+      hash: md5
+      md5: 3573cd367fe5064fc39aacc547e83e90
+      size: 474033
+    - path: ./data/bronze/tennis_odds/2019.xlsx
+      hash: md5
+      md5: bdcb682428702d3c5526eab54748d234
+      size: 411531
+    - path: ./data/bronze/tennis_odds/2020.xlsx
+      hash: md5
+      md5: fb3c93f2cc5aa1a1fb4e34772a68d4ec
+      size: 206869
+    - path: ./data/bronze/tennis_odds/2021.xlsx
+      hash: md5
+      md5: bcd3a9ccbc768469d9998109c950858e
+      size: 395807
+    - path: ./data/bronze/tennis_odds/2022.xlsx
+      hash: md5
+      md5: e6a867a787f86c021039587f7e8069f0
+      size: 417917
+    - path: ./data/bronze/tennis_odds/2023.xlsx
+      hash: md5
+      md5: 406196684d69df7953d4cef12705ddcf
+      size: 428174
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: dce764355878a35cd21d5b1c95df0b52
+      size: 2251
+    outs:
+    - path: ./data/silver/test.csv
+      hash: md5
+      md5: 07f73a75506b2ed775add62e462503a6
+      size: 104974
+    - path: ./data/silver/train.csv
+      hash: md5
+      md5: 49b157f33b5723348a59ead2672337e7
+      size: 1087340
