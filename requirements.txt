@@ -11,6 +11,7 @@ iniconfig==2.0.0
 ipykernel==6.29.5
 ipython==8.31.0
 jedi==0.19.2
+joblib==1.4.2
 jupyter_client==8.6.3
 jupyter_core==5.7.2
 kiwisolver==1.4.8
@@ -35,8 +36,12 @@ pytest==8.3.4
 python-dateutil==2.9.0.post0
 pytz==2024.2
 pyzmq==26.2.0
+scikit-learn==1.6.1
+scipy==1.15.1
 six==1.17.0
 stack-data==0.6.3
+-e git+ssh://git@github.com/p-gourseaud/tennis-predictor.git@299ac782bf0c59aacafe28f395ee754f8328c701#egg=tennis_predictor
+threadpoolctl==3.5.0
 tomli==2.2.1
 tornado==6.4.2
 tqdm==4.67.1
