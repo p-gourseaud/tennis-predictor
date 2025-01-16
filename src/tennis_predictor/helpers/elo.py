@@ -6,9 +6,7 @@ SPREAD_ELO: int = 400 # ELO update constant
 
 def update_elo(winner_elo: float, loser_elo: float) -> tuple[float, float]:
     """Compute new elo for winner and loser."""
-    if winner_elo < 0:
-        raise ValueError("ELO score must be positive.")
-    elif loser_elo < 0:
+    if winner_elo < 0 or loser_elo < 0:
         raise ValueError("ELO score must be positive.")
     
     E_winner = compute_expected_winrate(winner_elo, loser_elo)  # Expected score for winner
@@ -19,5 +17,8 @@ def update_elo(winner_elo: float, loser_elo: float) -> tuple[float, float]:
 
 def compute_expected_winrate(elo1: float, elo2: float) -> float:
     """Compute expected score for player 1 against player 2."""
+    if elo1 < 0 or elo2 < 0:
+        raise ValueError("ELO score must be positive.")
+    
     expected_winrate = 1 / (1 + 10 ** ((elo2 - elo1) / SPREAD_ELO))  # Expected score for player 1
     return expected_winrate
