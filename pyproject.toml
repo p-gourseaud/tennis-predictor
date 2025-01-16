@@ -1,0 +1,20 @@
+[project]
+name = "tennis_predictor"
+version = "0.1.0"
+description = "A package to predict tennis match outcomes"
+authors = [
+    { name="Pierre Gourseaud", email="pierre.gourseaud@gmail.com" }
+]
+license = { text = "MIT" }
+dependencies = [
+    "pandas>=2.2.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.4"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
