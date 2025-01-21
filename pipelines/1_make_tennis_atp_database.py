@@ -8,7 +8,7 @@ PATH_BACKTRACK = '../../..'
 DB_NAME = 'atpdatabase.db'
 PATH_OUTPUT = './data/silver/tennis_atp/'
 
-def move_and_run_script():
+def move_and_run_script() -> None:
     # Change directory
     os.chdir(PATH_TENNIS_ATP)
     # Run the shell script
