@@ -42,7 +42,7 @@ scikit-learn==1.6.1
 scipy==1.15.1
 six==1.17.0
 stack-data==0.6.3
--e git+ssh://git@github.com/p-gourseaud/tennis-predictor.git@fe314062780fd4d53fdfc0c7a1747d7eefaa6d60#egg=tennis_predictor
+-e git+ssh://git@github.com/p-gourseaud/tennis-predictor.git@076d25799e3f10029d60a6ee3b0a9f7826817928#egg=tennis_predictor
 threadpoolctl==3.5.0
 tomli==2.2.1
 tornado==6.4.2
@@ -51,3 +51,4 @@ traitlets==5.14.3
 typing_extensions==4.12.2
 tzdata==2024.2
 wcwidth==0.2.13
+xlrd==2.0.1
