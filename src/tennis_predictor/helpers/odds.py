@@ -15,7 +15,7 @@ def make_shortname(df: pd.DataFrame) -> pd.DataFrame:
     # First pass with 1 char
     n_chars = 1
     df['shortName'] = (
-        df['lastName'] 
+        df['lastName'].str.title()
         + ' ' 
         + df['firstName'].apply(_abbreviate_name, args=[n_chars])
     )
@@ -24,7 +24,7 @@ def make_shortname(df: pd.DataFrame) -> pd.DataFrame:
     df_duplicate_shortnames = df_count[df_count > 1]
 
     # As long as there are duplicates, make longer shortnames for the duplicates
-    while df_duplicate_shortnames.size > 0:
+    while df_duplicate_shortnames.shape[0] > 0:
         # Some players can have the same names, stop at 10 chars.
         if n_chars > 10:
             break
@@ -32,7 +32,7 @@ def make_shortname(df: pd.DataFrame) -> pd.DataFrame:
         df2 = df.merge(df_duplicate_shortnames, on='shortName', how='inner', suffixes=['', '_y'])
         df2 = df2.drop(columns=['id_y'])
         df2['shortName'] = (
-            df2['lastName'] 
+            df2['lastName'].str.title()
             + ' ' 
             + df2['firstName'].apply(_abbreviate_name, args=[n_chars])
         )

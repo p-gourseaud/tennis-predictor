@@ -18,6 +18,7 @@ def test_make_shortname():
         [5, 'Jose', 'Antelo'],
         [6, 'Jose', 'Antelo'],
         [7, 'Seoung Hun', 'Lee'],
+        [8, 'J M', 'del Potro'],
     ],
         columns = ['id', 'firstName', 'lastName']
     )
@@ -29,6 +30,7 @@ def test_make_shortname():
         [5, 'Jose', 'Antelo', 'Antelo Jose.'],  # Same long shortname for same name
         [6, 'Jose', 'Antelo', 'Antelo Jose.'],  # Same long shortname for same name
         [7, 'Seoung Hun', 'Lee', 'Lee S.H.'],
+        [8, 'J M', 'del Potro', 'Del Potro J.M.'],  # Titled name with particule
     ],
         columns = ['id', 'firstName', 'lastName', 'shortName']
     )
