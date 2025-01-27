@@ -9,13 +9,13 @@ def update_elo(winner_elo: float, loser_elo: float) -> tuple[float, float]:
     if winner_elo < 0 or loser_elo < 0:
         raise ValueError("ELO score must be positive.")
     
-    E_winner = compute_expected_winrate(winner_elo, loser_elo)  # Expected score for winner
+    E_winner = estimate_winrate(winner_elo, loser_elo)  # Expected score for winner
     E_loser = 1 - E_winner  # Expected score for loser
     winner_new_elo = winner_elo + K * (1 - E_winner)  # New ELO score for winner
     loser_new_elo = loser_elo + K * (0 - E_loser)  # New ELO score for loser
     return winner_new_elo, loser_new_elo
 
-def compute_expected_winrate(elo1: float, elo2: float) -> float:
+def estimate_winrate(elo1: float, elo2: float) -> float:
     """Compute expected score for player 1 against player 2."""
     if elo1 < 0 or elo2 < 0:
         raise ValueError("ELO score must be positive.")

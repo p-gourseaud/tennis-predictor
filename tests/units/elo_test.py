@@ -1,6 +1,6 @@
 import pytest
 
-from tennis_predictor.helpers.elo import update_elo, compute_expected_winrate
+from tennis_predictor.helpers.elo import update_elo, estimate_winrate
 
 def test_update_elo():
     elo1 = 1500
@@ -12,5 +12,5 @@ def test_update_elo():
 def test_compute_expected_winrate():
     elo1 = 1500
     elo2 = 1600
-    E_winrate = compute_expected_winrate(elo1, elo2)
+    E_winrate = estimate_winrate(elo1, elo2)
     assert E_winrate == pytest.approx(0.36, 0.01)
