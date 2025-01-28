@@ -1,9 +1,9 @@
 import pandas as pd
 
-INPUT_PATH = "data/silver/joined_dataset.csv"
-OUTPUT_TRAIN_PATH = "data/gold/train.csv"
-OUTPUT_DEV_PATH = "data/gold/dev.csv"
-OUTPUT_TEST_PATH = "data/gold/test.csv"
+INPUT_PATH = "data/interim/joined_dataset.csv"
+OUTPUT_TRAIN_PATH = "data/processed/train.csv"
+OUTPUT_DEV_PATH = "data/processed/dev.csv"
+OUTPUT_TEST_PATH = "data/processed/test.csv"
 DEV_CUTOFF_DATE = "2023-01-01"
 TEST_CUTOFF_DATE = "2024-01-01"
 

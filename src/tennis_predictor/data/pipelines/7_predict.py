@@ -2,13 +2,13 @@ import pandas as pd
 
 from tennis_predictor.helpers.elo import estimate_winrate
 
-INPUT_TRAIN_PATH = "data/gold/train.csv"
-INPUT_DEV_PATH = "data/gold/dev.csv"
-INPUT_TEST_PATH = "data/gold/test.csv"
+INPUT_TRAIN_PATH = "data/processed/train.csv"
+INPUT_DEV_PATH = "data/processed/dev.csv"
+INPUT_TEST_PATH = "data/processed/test.csv"
 
-OUTPUT_TRAIN_PATH = "data/gold/train_predictions.csv"
-OUTPUT_DEV_PATH = "data/gold/dev_predictions.csv"
-OUTPUT_TEST_PATH = "data/gold/test_predictions.csv"
+OUTPUT_TRAIN_PATH = "data/processed/train_predictions.csv"
+OUTPUT_DEV_PATH = "data/processed/dev_predictions.csv"
+OUTPUT_TEST_PATH = "data/processed/test_predictions.csv"
 
 
 def open_dataset(path: str) -> pd.DataFrame:

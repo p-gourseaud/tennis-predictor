@@ -2,11 +2,11 @@ import os
 import shutil
 import subprocess
 
-PATH_TENNIS_ATP = "./data/bronze/tennis_atp/"
+PATH_TENNIS_ATP = "./data/external/tennis_atp/"
 PATH_DB_SCRIPT = "./examples/SQLite/convert_sqlite.sh"
 PATH_BACKTRACK = "../../.."
 DB_NAME = "atpdatabase.db"
-PATH_OUTPUT = "./data/silver/tennis_atp/"
+PATH_OUTPUT = "./data/interim/tennis_atp/"
 
 
 def move_and_run_script() -> None:

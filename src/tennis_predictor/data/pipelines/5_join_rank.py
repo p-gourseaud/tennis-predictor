@@ -4,10 +4,10 @@ from functools import partial
 
 import pandas as pd
 
-DATABASE_PATH = "./data/silver/tennis_atp/atpdatabase.db"
-ODDS_PATH = "./data/silver/tennis_odds/odds.csv"
-ELO_PATH = "./data/silver/elo/elo_{surface_type}.csv"
-OUTPUT_PATH = "./data/silver/joined_dataset.csv"
+DATABASE_PATH = "./data/interim/tennis_atp/atpdatabase.db"
+ODDS_PATH = "./data/interim/tennis_odds/odds.csv"
+ELO_PATH = "./data/interim/elo/elo_{surface_type}.csv"
+OUTPUT_PATH = "./data/interim/joined_dataset.csv"
 
 
 def open_odds() -> pd.DataFrame:

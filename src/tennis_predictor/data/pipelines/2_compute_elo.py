@@ -4,8 +4,8 @@ import pandas as pd
 
 from tennis_predictor.helpers.elo import update_elo
 
-DATABASE_PATH = "./data/silver/tennis_atp/atpdatabase.db"
-OUTPUT_PATH = "./data/silver/elo/elo_{surface_type}.csv"
+DATABASE_PATH = "./data/interim/tennis_atp/atpdatabase.db"
+OUTPUT_PATH = "./data/interim/elo/elo_{surface_type}.csv"
 COLUMNS = ["player_id", "date", "tourney_id", "match_num", "elo", "n_matches"]
 
 

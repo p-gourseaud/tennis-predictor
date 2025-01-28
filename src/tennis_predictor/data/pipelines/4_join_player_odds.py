@@ -2,12 +2,12 @@ import warnings
 
 import pandas as pd
 
-PLAYER_PATH = "./data/silver/tennis_atp/players.csv"
-ODDS_FOLDER = "./data/bronze/tennis_odds"
+PLAYER_PATH = "./data/interim/tennis_atp/players.csv"
+ODDS_FOLDER = "./data/external/tennis_odds"
 XLS_MEN = list(range(2001, 2013))
 XLS_WOMEN = list(range(2007, 2013))
 XLSX = list(range(2013, 2026))
-OUTPUT_PATH = "./data/silver/tennis_odds/odds.csv"
+OUTPUT_PATH = "./data/interim/tennis_odds/odds.csv"
 
 
 def open_odds() -> pd.DataFrame:

@@ -4,8 +4,8 @@ import pandas as pd
 
 from tennis_predictor.helpers.odds import make_shortname
 
-DATABASE_PATH = "./data/silver/tennis_atp/atpdatabase.db"
-OUTPUT_PATH = "./data/silver/tennis_atp/players.csv"
+DATABASE_PATH = "./data/interim/tennis_atp/atpdatabase.db"
+OUTPUT_PATH = "./data/interim/tennis_atp/players.csv"
 
 
 def open_db() -> pd.DataFrame:

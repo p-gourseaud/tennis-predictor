@@ -4,17 +4,17 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score, log_loss
 
-INPUT_TRAIN_PATH = "data/gold/train_predictions.csv"
-INPUT_DEV_PATH = "data/gold/dev_predictions.csv"
-INPUT_TEST_PATH = "data/gold/test_predictions.csv"
+INPUT_TRAIN_PATH = "data/processed/train_predictions.csv"
+INPUT_DEV_PATH = "data/processed/dev_predictions.csv"
+INPUT_TEST_PATH = "data/processed/test_predictions.csv"
 
-OUTPUT_DF_TRAIN_PATH = "data/gold/train_evaluation.csv"
-OUTPUT_DF_DEV_PATH = "data/gold/dev_evaluation.csv"
-OUTPUT_DF_TEST_PATH = "data/gold/test_evaluation.csv"
+OUTPUT_DF_TRAIN_PATH = "data/processed/train_evaluation.csv"
+OUTPUT_DF_DEV_PATH = "data/processed/dev_evaluation.csv"
+OUTPUT_DF_TEST_PATH = "data/processed/test_evaluation.csv"
 
-OUTPUT_JSON_TRAIN_PATH = "data/gold/train_scores.json"
-OUTPUT_JSON_DEV_PATH = "data/gold/dev_scores.json"
-OUTPUT_JSON_TEST_PATH = "data/gold/test_scores.json"
+OUTPUT_JSON_TRAIN_PATH = "data/processed/train_scores.json"
+OUTPUT_JSON_DEV_PATH = "data/processed/dev_scores.json"
+OUTPUT_JSON_TEST_PATH = "data/processed/test_scores.json"
 
 
 def open_dataset(path: str) -> pd.DataFrame:
