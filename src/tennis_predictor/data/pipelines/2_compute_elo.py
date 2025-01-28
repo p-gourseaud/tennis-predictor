@@ -1,24 +1,11 @@
-import sqlite3
-
 import pandas as pd
 
 from tennis_predictor.config.data import (
     ELO_COLUMNS,
     ELO_INTERIM_PATH,
-    TENNIS_ATP_DATABASE_PATH,
 )
+from tennis_predictor.helpers.data import open_db, save_df
 from tennis_predictor.helpers.elo import update_elo
-
-
-def open_db() -> pd.DataFrame:
-    """Open the database and return the matches."""
-    # Connect to the database
-    cnx = sqlite3.connect(TENNIS_ATP_DATABASE_PATH)
-    # Select sorted matches
-    query = "SELECT * FROM matches ORDER BY tourney_date, tourney_id, CAST(match_num AS INT)"
-    # Execute the query and load the result into a DataFrame
-    df = pd.read_sql_query(query, cnx)
-    return df
 
 
 def filter_db(df: pd.DataFrame, surface_type: str) -> pd.DataFrame:
@@ -108,28 +95,30 @@ def append_elo_row(row: pd.Series, dfs_elo: dict[int, pd.DataFrame]) -> None:
     )
 
 
-def save_elo(dfs_elo: dict[int, pd.DataFrame], surface_type: str) -> None:
-    """Save the ELO scores."""
+def make_elo_df(dfs_elo: dict[int, pd.DataFrame]) -> pd.DataFrame:
+    """Make the ELO DataFrame."""
     SORT_COLUMNS = ["date", "tourney_id", "match_num"]
-    (  # Save the ELO scores
-        pd.concat(list(dfs_elo.values()), ignore_index=True)
-        .sort_values(by=SORT_COLUMNS)
-        .to_csv(ELO_INTERIM_PATH.format(surface_type=surface_type), index=False)
+    return pd.concat(list(dfs_elo.values()), ignore_index=True).sort_values(
+        by=SORT_COLUMNS
     )
 
 
 def compute_elo(surface_type: str) -> None:
     """Compute the ELO scores for all matches."""
     SAVE_EVERY = 3000
-    df_matches = open_db()
+    df_matches = open_db(
+        "SELECT * FROM matches ORDER BY tourney_date, tourney_id, CAST(match_num AS INT)"
+    )
     df_matches = filter_db(df_matches, surface_type)
     dfs_elo = initialize_elo(df_matches)
     for row in df_matches.iterrows():
         if row[0] % SAVE_EVERY == 0:
             print(f"Processing row {row[0]}")
-            save_elo(dfs_elo, surface_type)
+            save_df(
+                make_elo_df(dfs_elo), ELO_INTERIM_PATH.format(surface_type=surface_type)
+            )
         append_elo_row(row[1], dfs_elo)
-    save_elo(dfs_elo, surface_type)
+    save_df(make_elo_df(dfs_elo), ELO_INTERIM_PATH.format(surface_type=surface_type))
 
 
 # def is_seen_match(row: pd.Series, df_elo: pd.DataFrame) -> bool:

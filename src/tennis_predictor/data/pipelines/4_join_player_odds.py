@@ -10,6 +10,7 @@ from tennis_predictor.config.data import (
     ODDS_XLSX_YEAR_RANGE,
     PLAYERS_INTERIM_PATH,
 )
+from tennis_predictor.helpers.data import save_df
 
 
 def open_odds() -> pd.DataFrame:
@@ -79,13 +80,9 @@ def join(df_odds: pd.DataFrame, df_players: pd.DataFrame) -> pd.DataFrame:
     return df_final
 
 
-def save(df: pd.DataFrame) -> None:
-    df.to_csv(ODDS_INTERIM_PATH, index=False)
-
-
 if __name__ == "__main__":
     df_odds = open_odds()
     df_players = open_players()
     df_unique = filter_unique(df_players)
     df_joined = join(df_odds, df_unique)
-    save(df_joined)
+    save_df(df_joined, ODDS_INTERIM_PATH)

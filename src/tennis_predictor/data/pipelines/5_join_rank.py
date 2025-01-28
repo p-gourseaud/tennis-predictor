@@ -1,5 +1,4 @@
 import multiprocessing
-import sqlite3
 from functools import partial
 
 import pandas as pd
@@ -8,23 +7,11 @@ from tennis_predictor.config.data import (
     ELO_INTERIM_PATH,
     JOINED_INTERIM_PATH,
     ODDS_INTERIM_PATH,
-    TENNIS_ATP_DATABASE_PATH,
 )
+from tennis_predictor.helpers.data import open_db, open_df, save_df
 
 
-def open_odds() -> pd.DataFrame:
-    """Open Odds dataset."""
-    return pd.read_csv(ODDS_INTERIM_PATH)
-
-
-def open_rank() -> pd.DataFrame:
-    """Open the database and return the ranks."""
-    # Connect to the database
-    cnx = sqlite3.connect(TENNIS_ATP_DATABASE_PATH)
-    # Select sorted matches
-    query = "SELECT * FROM ranking"
-    # Execute the query and load the result into a DataFrame
-    df_ranks = pd.read_sql_query(query, cnx)
+def filter_rank(df_ranks: pd.DataFrame) -> pd.DataFrame:
     # Remove rows with bad values
     df_filtered = df_ranks[
         (df_ranks["date"].astype(str).str.isnumeric())
@@ -39,7 +26,7 @@ def open_elo(surface_type: str) -> pd.DataFrame:
     surface_type = surface_type.capitalize()
     if surface_type not in ALLOWED_SURFACES:
         raise ValueError(f"surface_type must be one of {ALLOWED_SURFACES}")
-    return pd.read_csv(ELO_INTERIM_PATH.format(surface_type=surface_type))
+    return open_df(ELO_INTERIM_PATH.format(surface_type=surface_type))
 
 
 def _find_latest_rank(
@@ -189,10 +176,6 @@ def join_elo(
     return df_odds
 
 
-def save(df: pd.DataFrame) -> None:
-    df.to_csv(JOINED_INTERIM_PATH, index=False)
-
-
 # Take odds.csv
 # Join rank and points on date
 # Join ELO
@@ -201,8 +184,9 @@ def save(df: pd.DataFrame) -> None:
 # Save
 
 if __name__ == "__main__":
-    df_odds = open_odds()
-    df_rank = open_rank()
+    df_odds = open_df(ODDS_INTERIM_PATH)
+    df_rank = open_db("SELECT * FROM ranking")
+    df_rank = filter_rank(df_rank)
     df_joined = join_rank(df_odds, df_rank)
 
     df_elo = open_elo("all")
@@ -213,5 +197,4 @@ if __name__ == "__main__":
     df_joined = join_elo(
         df_joined, df_elo, df_elo_carpet, df_elo_clay, df_elo_grass, df_elo_hard
     )
-
-    save(df_joined)
+    save_df(df_joined, JOINED_INTERIM_PATH)

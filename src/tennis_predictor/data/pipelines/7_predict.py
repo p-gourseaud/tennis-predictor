@@ -5,13 +5,8 @@ from tennis_predictor.config.data import (
     TEST_PREDICTION_PATH,
     TRAIN_PREDICTION_PATH,
 )
+from tennis_predictor.helpers.data import open_df, save_df
 from tennis_predictor.helpers.elo import estimate_winrate
-
-
-def open_dataset(path: str) -> pd.DataFrame:
-    """Open the dataset and filter out row with missing ELO."""
-    df = pd.read_csv(path)
-    return df
 
 
 def predict_winner(df: pd.DataFrame):
@@ -38,23 +33,18 @@ def compute_kelly_criterion(df: pd.DataFrame):
     return df
 
 
-def save_predictions(df: pd.DataFrame, path: str) -> None:
-    """Save the predictions."""
-    df.to_csv(path, index=False)
-
-
 if __name__ == "__main__":
-    df_train = open_dataset(TRAIN_PREDICTION_PATH)
+    df_train = open_df(TRAIN_PREDICTION_PATH)
     df_train = predict_winner(df_train)
     df_train = compute_kelly_criterion(df_train)
-    save_predictions(df_train, TRAIN_PREDICTION_PATH)
+    save_df(df_train, TRAIN_PREDICTION_PATH)
 
-    df_dev = open_dataset(DEV_PREDICTION_PATH)
+    df_dev = open_df(DEV_PREDICTION_PATH)
     df_dev = predict_winner(df_dev)
     df_dev = compute_kelly_criterion(df_dev)
-    save_predictions(df_dev, DEV_PREDICTION_PATH)
+    save_df(df_dev, DEV_PREDICTION_PATH)
 
-    df_test = open_dataset(TEST_PREDICTION_PATH)
+    df_test = open_df(TEST_PREDICTION_PATH)
     df_test = predict_winner(df_test)
     df_test = compute_kelly_criterion(df_test)
-    save_predictions(df_test, TEST_PREDICTION_PATH)
+    save_df(df_test, TEST_PREDICTION_PATH)

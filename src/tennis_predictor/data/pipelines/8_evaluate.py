@@ -1,7 +1,4 @@
-import json
-
 import numpy as np
-import pandas as pd
 from sklearn.metrics import accuracy_score, log_loss
 
 from tennis_predictor.config.data import (
@@ -15,12 +12,7 @@ from tennis_predictor.config.data import (
     TRAIN_PREDICTION_PATH,
     TRAIN_SCORES_PATH,
 )
-
-
-def open_dataset(path: str) -> pd.DataFrame:
-    """Open the dataset and filter out row with missing ELO."""
-    df = pd.read_csv(path)
-    return df
+from tennis_predictor.helpers.data import open_df, save_df, save_dict
 
 
 def get_accuracy_score(df) -> float:
@@ -76,19 +68,10 @@ def get_bankroll_sharpe_ratio(df) -> float:
     return (df["growth"].mean() - 1) / df["growth"].std()
 
 
-def save_evaluation_df(df, path):
-    df.to_csv(path, index=False)
-
-
-def save_evaluation_dict(evaluation_dict, path):
-    with open(path, "w") as f:
-        json.dump(evaluation_dict, f, indent=4)
-
-
 if __name__ == "__main__":
-    df_train = open_dataset(TRAIN_PREDICTION_PATH)
+    df_train = open_df(TRAIN_PREDICTION_PATH)
     df_train = compute_kelly_capital(df_train)
-    save_evaluation_df(df_train, TRAIN_EVALUATION_PATH)
+    save_df(df_train, TRAIN_EVALUATION_PATH)
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_train),
         "log_loss": get_log_loss(df_train),
@@ -96,11 +79,11 @@ if __name__ == "__main__":
         "risk": get_bankroll_risk(df_train),
         "sharpe_ratio": get_bankroll_sharpe_ratio(df_train),
     }
-    save_evaluation_dict(evaluation_dict, TRAIN_SCORES_PATH)
+    save_dict(evaluation_dict, TRAIN_SCORES_PATH)
 
-    df_dev = open_dataset(DEV_PREDICTION_PATH)
+    df_dev = open_df(DEV_PREDICTION_PATH)
     df_dev = compute_kelly_capital(df_dev)
-    save_evaluation_df(df_dev, DEV_EVALUATION_PATH)
+    save_df(df_dev, DEV_EVALUATION_PATH)
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_dev),
         "log_loss": get_log_loss(df_dev),
@@ -108,11 +91,11 @@ if __name__ == "__main__":
         "risk": get_bankroll_risk(df_dev),
         "sharpe_ratio": get_bankroll_sharpe_ratio(df_dev),
     }
-    save_evaluation_dict(evaluation_dict, DEV_SCORES_PATH)
+    save_dict(evaluation_dict, DEV_SCORES_PATH)
 
-    df_test = open_dataset(TEST_PREDICTION_PATH)
+    df_test = open_df(TEST_PREDICTION_PATH)
     df_test = compute_kelly_capital(df_test)
-    save_evaluation_df(df_test, TEST_EVALUATION_PATH)
+    save_df(df_test, TEST_EVALUATION_PATH)
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_test),
         "log_loss": get_log_loss(df_test),
@@ -120,4 +103,4 @@ if __name__ == "__main__":
         "risk": get_bankroll_risk(df_test),
         "sharpe_ratio": get_bankroll_sharpe_ratio(df_test),
     }
-    save_evaluation_dict(evaluation_dict, TEST_SCORES_PATH)
+    save_dict(evaluation_dict, TEST_SCORES_PATH)
