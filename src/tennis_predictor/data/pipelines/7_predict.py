@@ -1,14 +1,11 @@
 import pandas as pd
 
+from tennis_predictor.config.data import (
+    DEV_PREDICTION_PATH,
+    TEST_PREDICTION_PATH,
+    TRAIN_PREDICTION_PATH,
+)
 from tennis_predictor.helpers.elo import estimate_winrate
-
-INPUT_TRAIN_PATH = "data/processed/train.csv"
-INPUT_DEV_PATH = "data/processed/dev.csv"
-INPUT_TEST_PATH = "data/processed/test.csv"
-
-OUTPUT_TRAIN_PATH = "data/processed/train_predictions.csv"
-OUTPUT_DEV_PATH = "data/processed/dev_predictions.csv"
-OUTPUT_TEST_PATH = "data/processed/test_predictions.csv"
 
 
 def open_dataset(path: str) -> pd.DataFrame:
@@ -47,17 +44,17 @@ def save_predictions(df: pd.DataFrame, path: str) -> None:
 
 
 if __name__ == "__main__":
-    df_train = open_dataset(INPUT_TRAIN_PATH)
+    df_train = open_dataset(TRAIN_PREDICTION_PATH)
     df_train = predict_winner(df_train)
     df_train = compute_kelly_criterion(df_train)
-    save_predictions(df_train, OUTPUT_TRAIN_PATH)
+    save_predictions(df_train, TRAIN_PREDICTION_PATH)
 
-    df_dev = open_dataset(INPUT_DEV_PATH)
+    df_dev = open_dataset(DEV_PREDICTION_PATH)
     df_dev = predict_winner(df_dev)
     df_dev = compute_kelly_criterion(df_dev)
-    save_predictions(df_dev, OUTPUT_DEV_PATH)
+    save_predictions(df_dev, DEV_PREDICTION_PATH)
 
-    df_test = open_dataset(INPUT_TEST_PATH)
+    df_test = open_dataset(TEST_PREDICTION_PATH)
     df_test = predict_winner(df_test)
     df_test = compute_kelly_criterion(df_test)
-    save_predictions(df_test, OUTPUT_TEST_PATH)
+    save_predictions(df_test, TEST_PREDICTION_PATH)

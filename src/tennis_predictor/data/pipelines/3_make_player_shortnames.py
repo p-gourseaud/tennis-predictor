@@ -2,16 +2,14 @@ import sqlite3
 
 import pandas as pd
 
+from tennis_predictor.config.data import PLAYERS_INTERIM_PATH, TENNIS_ATP_DATABASE_PATH
 from tennis_predictor.helpers.odds import make_shortname
-
-DATABASE_PATH = "./data/interim/tennis_atp/atpdatabase.db"
-OUTPUT_PATH = "./data/interim/tennis_atp/players.csv"
 
 
 def open_db() -> pd.DataFrame:
     """Open the database and return the players."""
     # Connect to the database
-    cnx = sqlite3.connect(DATABASE_PATH)
+    cnx = sqlite3.connect(TENNIS_ATP_DATABASE_PATH)
     # Select sorted matches
     query = "SELECT * FROM player"
     # Execute the query and load the result into a DataFrame
@@ -30,7 +28,7 @@ def transform(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def save(df: pd.DataFrame) -> None:
-    df.to_csv(OUTPUT_PATH, index=False)
+    df.to_csv(PLAYERS_INTERIM_PATH, index=False)
 
 
 if __name__ == "__main__":

@@ -2,34 +2,36 @@ import warnings
 
 import pandas as pd
 
-PLAYER_PATH = "./data/interim/tennis_atp/players.csv"
-ODDS_FOLDER = "./data/external/tennis_odds"
-XLS_MEN = list(range(2001, 2013))
-XLS_WOMEN = list(range(2007, 2013))
-XLSX = list(range(2013, 2026))
-OUTPUT_PATH = "./data/interim/tennis_odds/odds.csv"
+from tennis_predictor.config.data import (
+    ODDS_EXTERNAL_FOLDER,
+    ODDS_INTERIM_PATH,
+    ODDS_XLS_MEN_YEAR_RANGE,
+    ODDS_XLS_WOMEN_YEAR_RANGE,
+    ODDS_XLSX_YEAR_RANGE,
+    PLAYERS_INTERIM_PATH,
+)
 
 
 def open_odds() -> pd.DataFrame:
     """Open and concat all odds files."""
     dfs = []
-    for year in XLS_MEN:
-        df = pd.read_excel(f"{ODDS_FOLDER}/{year}.xls")
+    for year in ODDS_XLS_MEN_YEAR_RANGE:
+        df = pd.read_excel(f"{ODDS_EXTERNAL_FOLDER}/{year}.xls")
         dfs.append(df)
-    for year in XLS_WOMEN:
-        df = pd.read_excel(f"{ODDS_FOLDER}/women_{year}.xls")
+    for year in ODDS_XLS_WOMEN_YEAR_RANGE:
+        df = pd.read_excel(f"{ODDS_EXTERNAL_FOLDER}/women_{year}.xls")
         dfs.append(df)
-    for year in XLSX:
-        df = pd.read_excel(f"{ODDS_FOLDER}/{year}.xlsx")
+    for year in ODDS_XLSX_YEAR_RANGE:
+        df = pd.read_excel(f"{ODDS_EXTERNAL_FOLDER}/{year}.xlsx")
         dfs.append(df)
-        df = pd.read_excel(f"{ODDS_FOLDER}/women_{year}.xlsx")
+        df = pd.read_excel(f"{ODDS_EXTERNAL_FOLDER}/women_{year}.xlsx")
         dfs.append(df)
     return pd.concat(dfs)
 
 
 def open_players() -> pd.DataFrame:
     """Open the players dataset."""
-    return pd.read_csv(PLAYER_PATH)
+    return pd.read_csv(PLAYERS_INTERIM_PATH)
 
 
 def filter_unique(df: pd.DataFrame) -> pd.DataFrame:
@@ -78,7 +80,7 @@ def join(df_odds: pd.DataFrame, df_players: pd.DataFrame) -> pd.DataFrame:
 
 
 def save(df: pd.DataFrame) -> None:
-    df.to_csv(OUTPUT_PATH, index=False)
+    df.to_csv(ODDS_INTERIM_PATH, index=False)
 
 
 if __name__ == "__main__":

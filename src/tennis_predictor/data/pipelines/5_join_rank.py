@@ -4,21 +4,23 @@ from functools import partial
 
 import pandas as pd
 
-DATABASE_PATH = "./data/interim/tennis_atp/atpdatabase.db"
-ODDS_PATH = "./data/interim/tennis_odds/odds.csv"
-ELO_PATH = "./data/interim/elo/elo_{surface_type}.csv"
-OUTPUT_PATH = "./data/interim/joined_dataset.csv"
+from tennis_predictor.config.data import (
+    ELO_INTERIM_PATH,
+    JOINED_INTERIM_PATH,
+    ODDS_INTERIM_PATH,
+    TENNIS_ATP_DATABASE_PATH,
+)
 
 
 def open_odds() -> pd.DataFrame:
     """Open Odds dataset."""
-    return pd.read_csv(ODDS_PATH)
+    return pd.read_csv(ODDS_INTERIM_PATH)
 
 
 def open_rank() -> pd.DataFrame:
     """Open the database and return the ranks."""
     # Connect to the database
-    cnx = sqlite3.connect(DATABASE_PATH)
+    cnx = sqlite3.connect(TENNIS_ATP_DATABASE_PATH)
     # Select sorted matches
     query = "SELECT * FROM ranking"
     # Execute the query and load the result into a DataFrame
@@ -37,7 +39,7 @@ def open_elo(surface_type: str) -> pd.DataFrame:
     surface_type = surface_type.capitalize()
     if surface_type not in ALLOWED_SURFACES:
         raise ValueError(f"surface_type must be one of {ALLOWED_SURFACES}")
-    return pd.read_csv(ELO_PATH.format(surface_type=surface_type))
+    return pd.read_csv(ELO_INTERIM_PATH.format(surface_type=surface_type))
 
 
 def _find_latest_rank(
@@ -188,7 +190,7 @@ def join_elo(
 
 
 def save(df: pd.DataFrame) -> None:
-    df.to_csv(OUTPUT_PATH, index=False)
+    df.to_csv(JOINED_INTERIM_PATH, index=False)
 
 
 # Take odds.csv

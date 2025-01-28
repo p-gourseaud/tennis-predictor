@@ -2,17 +2,18 @@ import sqlite3
 
 import pandas as pd
 
+from tennis_predictor.config.data import (
+    ELO_COLUMNS,
+    ELO_INTERIM_PATH,
+    TENNIS_ATP_DATABASE_PATH,
+)
 from tennis_predictor.helpers.elo import update_elo
-
-DATABASE_PATH = "./data/interim/tennis_atp/atpdatabase.db"
-OUTPUT_PATH = "./data/interim/elo/elo_{surface_type}.csv"
-COLUMNS = ["player_id", "date", "tourney_id", "match_num", "elo", "n_matches"]
 
 
 def open_db() -> pd.DataFrame:
     """Open the database and return the matches."""
     # Connect to the database
-    cnx = sqlite3.connect(DATABASE_PATH)
+    cnx = sqlite3.connect(TENNIS_ATP_DATABASE_PATH)
     # Select sorted matches
     query = "SELECT * FROM matches ORDER BY tourney_date, tourney_id, CAST(match_num AS INT)"
     # Execute the query and load the result into a DataFrame
@@ -44,7 +45,7 @@ def initialize_elo(df_matches: pd.DataFrame) -> dict[int, pd.DataFrame]:
     ids = set(df_matches["winner_id"].unique()) | set(df_matches["loser_id"].unique())
     dfs_elo = {
         int(p): pd.DataFrame(
-            [[int(p), int("18770701"), None, None, 1500.0, int(0)]], columns=COLUMNS
+            [[int(p), int("18770701"), None, None, 1500.0, int(0)]], columns=ELO_COLUMNS
         )
         for p in ids
     }
@@ -81,7 +82,7 @@ def append_elo_row(row: pd.Series, dfs_elo: dict[int, pd.DataFrame]) -> None:
                         int(winner_n_matches + 1),
                     ]
                 ],
-                columns=COLUMNS,
+                columns=ELO_COLUMNS,
             ),
         ],
         ignore_index=True,
@@ -100,7 +101,7 @@ def append_elo_row(row: pd.Series, dfs_elo: dict[int, pd.DataFrame]) -> None:
                         int(loser_n_matches + 1),
                     ]
                 ],
-                columns=COLUMNS,
+                columns=ELO_COLUMNS,
             ),
         ],
         ignore_index=True,
@@ -113,7 +114,7 @@ def save_elo(dfs_elo: dict[int, pd.DataFrame], surface_type: str) -> None:
     (  # Save the ELO scores
         pd.concat(list(dfs_elo.values()), ignore_index=True)
         .sort_values(by=SORT_COLUMNS)
-        .to_csv(OUTPUT_PATH.format(surface_type=surface_type), index=False)
+        .to_csv(ELO_INTERIM_PATH.format(surface_type=surface_type), index=False)
     )
 
 
