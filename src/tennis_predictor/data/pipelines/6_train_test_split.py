@@ -7,6 +7,7 @@ OUTPUT_TEST_PATH = "data/gold/test.csv"
 DEV_CUTOFF_DATE = "2023-01-01"
 TEST_CUTOFF_DATE = "2024-01-01"
 
+
 def train_test_split() -> None:
     df = pd.read_csv(INPUT_PATH)
 
@@ -17,6 +18,7 @@ def train_test_split() -> None:
     df_train.to_csv(OUTPUT_TRAIN_PATH, index=False)
     df_dev.to_csv(OUTPUT_DEV_PATH, index=False)
     df_test.to_csv(OUTPUT_TEST_PATH, index=False)
+
 
 if __name__ == "__main__":
     train_test_split()

@@ -1,11 +1,13 @@
 import sqlite3
+
 import pandas as pd
 
 from tennis_predictor.helpers.elo import update_elo
 
-DATABASE_PATH = './data/silver/tennis_atp/atpdatabase.db'
-OUTPUT_PATH = './data/silver/elo/elo_{surface_type}.csv'
-COLUMNS = ['player_id', 'date', 'tourney_id', 'match_num', 'elo', 'n_matches']
+DATABASE_PATH = "./data/silver/tennis_atp/atpdatabase.db"
+OUTPUT_PATH = "./data/silver/elo/elo_{surface_type}.csv"
+COLUMNS = ["player_id", "date", "tourney_id", "match_num", "elo", "n_matches"]
+
 
 def open_db() -> pd.DataFrame:
     """Open the database and return the matches."""
@@ -17,61 +19,103 @@ def open_db() -> pd.DataFrame:
     df = pd.read_sql_query(query, cnx)
     return df
 
+
 def filter_db(df: pd.DataFrame, surface_type: str) -> pd.DataFrame:
     """Filter the database, keeping only the matches on the specified surface."""
     # Filter df where player_id and tourney_date can be cast as int
-    ALLOWED_SURFACES = ['Grass', 'Clay', 'Hard', 'Carpet', 'All']
+    ALLOWED_SURFACES = ["Grass", "Clay", "Hard", "Carpet", "All"]
     surface_type = surface_type.capitalize()
     if surface_type not in ALLOWED_SURFACES:
         raise ValueError(f"surface_type must be one of {ALLOWED_SURFACES}")
-    surface_condition = (df['surface'] == surface_type) if surface_type != 'All' else True
+    surface_condition = (
+        (df["surface"] == surface_type) if surface_type != "All" else True
+    )
     df_filtered = df[
-        (df['tourney_date'].astype(str).str.isnumeric())  # Remove bad rows
-        & (df['winner_id'].astype(str).str.isnumeric())
-        & (df['loser_id'].astype(str).str.isnumeric())
+        (df["tourney_date"].astype(str).str.isnumeric())  # Remove bad rows
+        & (df["winner_id"].astype(str).str.isnumeric())
+        & (df["loser_id"].astype(str).str.isnumeric())
         & surface_condition  # Surface condition
     ]
     return df_filtered.reset_index(drop=True)
 
-def initialize_elo(df_matches: pd.DataFrame = open_db()) -> dict[int, pd.DataFrame]:
+
+def initialize_elo(df_matches: pd.DataFrame) -> dict[int, pd.DataFrame]:
     """Initialize the ELO scores at 1500 for all players."""
-    ids = set(df_matches['winner_id'].unique()) | set(df_matches['loser_id'].unique())
+    ids = set(df_matches["winner_id"].unique()) | set(df_matches["loser_id"].unique())
     dfs_elo = {
-        int(p): pd.DataFrame([[int(p), int('18770701'), None, None, 1500., int(0)]], columns=COLUMNS)
+        int(p): pd.DataFrame(
+            [[int(p), int("18770701"), None, None, 1500.0, int(0)]], columns=COLUMNS
+        )
         for p in ids
     }
     return dfs_elo
 
+
 def append_elo_row(row: pd.Series, dfs_elo: dict[int, pd.DataFrame]) -> None:
     """Compute 2 ELO rows from 1 match row."""
-    winner_id = int(row['winner_id'])
-    loser_id = int(row['loser_id'])
-    date = int(row['tourney_date'])
-    tourney_id = str(row['tourney_id'])
-    match_num = int(row['match_num'])
-    
-    winner_elo, winner_n_matches = dfs_elo[winner_id].loc[:, ['elo', 'n_matches']].iloc[-1]  # Get the last ELO score of the player
-    loser_elo, loser_n_matches = dfs_elo[loser_id].loc[:, ['elo', 'n_matches']].iloc[-1]  # Get the last ELO score of the player
+    winner_id = int(row["winner_id"])
+    loser_id = int(row["loser_id"])
+    date = int(row["tourney_date"])
+    tourney_id = str(row["tourney_id"])
+    match_num = int(row["match_num"])
+
+    winner_elo, winner_n_matches = (
+        dfs_elo[winner_id].loc[:, ["elo", "n_matches"]].iloc[-1]
+    )  # Get the last ELO score of the player
+    loser_elo, loser_n_matches = (
+        dfs_elo[loser_id].loc[:, ["elo", "n_matches"]].iloc[-1]
+    )  # Get the last ELO score of the player
     winner_new_elo, loser_new_elo = update_elo(winner_elo, loser_elo)
 
-    dfs_elo[winner_id] = pd.concat([
-        dfs_elo[winner_id],
-        pd.DataFrame([[winner_id, date, tourney_id, match_num, winner_new_elo, int(winner_n_matches + 1)]], columns=COLUMNS)
-    ], ignore_index=True)
-    dfs_elo[loser_id] = pd.concat([
-        dfs_elo[loser_id],
-        pd.DataFrame([[loser_id, date, tourney_id, match_num, loser_new_elo, int(loser_n_matches + 1)]], columns=COLUMNS)
-    ], ignore_index=True)
+    dfs_elo[winner_id] = pd.concat(
+        [
+            dfs_elo[winner_id],
+            pd.DataFrame(
+                [
+                    [
+                        winner_id,
+                        date,
+                        tourney_id,
+                        match_num,
+                        winner_new_elo,
+                        int(winner_n_matches + 1),
+                    ]
+                ],
+                columns=COLUMNS,
+            ),
+        ],
+        ignore_index=True,
+    )
+    dfs_elo[loser_id] = pd.concat(
+        [
+            dfs_elo[loser_id],
+            pd.DataFrame(
+                [
+                    [
+                        loser_id,
+                        date,
+                        tourney_id,
+                        match_num,
+                        loser_new_elo,
+                        int(loser_n_matches + 1),
+                    ]
+                ],
+                columns=COLUMNS,
+            ),
+        ],
+        ignore_index=True,
+    )
+
 
 def save_elo(dfs_elo: dict[int, pd.DataFrame], surface_type: str) -> None:
     """Save the ELO scores."""
-    SORT_COLUMNS = ['date', 'tourney_id', 'match_num']
+    SORT_COLUMNS = ["date", "tourney_id", "match_num"]
     (  # Save the ELO scores
-        pd
-        .concat([df for df in dfs_elo.values()], ignore_index=True)
+        pd.concat(list(dfs_elo.values()), ignore_index=True)
         .sort_values(by=SORT_COLUMNS)
         .to_csv(OUTPUT_PATH.format(surface_type=surface_type), index=False)
     )
+
 
 def compute_elo(surface_type: str) -> None:
     """Compute the ELO scores for all matches."""
@@ -81,10 +125,11 @@ def compute_elo(surface_type: str) -> None:
     dfs_elo = initialize_elo(df_matches)
     for row in df_matches.iterrows():
         if row[0] % SAVE_EVERY == 0:
-            print(f'Processing row {row[0]}')
+            print(f"Processing row {row[0]}")
             save_elo(dfs_elo, surface_type)
         append_elo_row(row[1], dfs_elo)
     save_elo(dfs_elo, surface_type)
+
 
 # def is_seen_match(row: pd.Series, df_elo: pd.DataFrame) -> bool:
 #     """Check if the match is seen."""
@@ -92,8 +137,8 @@ def compute_elo(surface_type: str) -> None:
 #     tourney_id = str(row['tourney_id'])
 #     match_num = int(row['match_num'])
 #     return (
-#         (df_elo['date'] == date) & 
-#         (df_elo['tourney_id'] == tourney_id) & 
+#         (df_elo['date'] == date) &
+#         (df_elo['tourney_id'] == tourney_id) &
 #         (df_elo['match_num'] == match_num)
 #     ).any()
 
@@ -113,8 +158,8 @@ def compute_elo(surface_type: str) -> None:
 #     df_elo.to_csv(OUTPUT_PATH, index=False)
 
 if __name__ == "__main__":
-    compute_elo(surface_type='Grass')
-    compute_elo(surface_type='Clay')
-    compute_elo(surface_type='Hard')
-    compute_elo(surface_type='Carpet')
-    compute_elo(surface_type='All')
+    compute_elo(surface_type="Grass")
+    compute_elo(surface_type="Clay")
+    compute_elo(surface_type="Hard")
+    compute_elo(surface_type="Carpet")
+    compute_elo(surface_type="All")
