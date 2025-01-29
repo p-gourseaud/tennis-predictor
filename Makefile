@@ -7,9 +7,9 @@ make_database:
 	python src/tennis_predictor/data/pipelines/train_test_split.py
 
 make_prediction:
-	python src/tennis_predictor/data/pipelines/predict.py
+	python src/tennis_predictor/models/predict.py
 
 make_evaluation:
-	python src/tennis_predictor/data/pipelines/evaluate.py
+	python src/tennis_predictor/models/evaluate.py
 
 make_all: make_database make_prediction make_evaluation
