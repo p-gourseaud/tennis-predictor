@@ -28,9 +28,9 @@ JOINED_INTERIM_PATH = "./data/interim/joined_dataset.csv"
 
 # Processed
 # # Input
-TRAIN_PREDICTION_PATH = "data/processed/train.csv"
-DEV_PREDICTION_PATH = "data/processed/dev.csv"
-TEST_PREDICTION_PATH = "data/processed/test.csv"
+TRAIN_PATH = "data/processed/train.csv"
+DEV_PATH = "data/processed/dev.csv"
+TEST_PATH = "data/processed/test.csv"
 DEV_START_DATE = "2023-01-01"
 TEST_START_DATE = "2024-01-01"
 # # Prediction

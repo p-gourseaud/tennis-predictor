@@ -1,8 +1,11 @@
 import pandas as pd
 
 from tennis_predictor.config.data import (
+    DEV_PATH,
     DEV_PREDICTION_PATH,
+    TEST_PATH,
     TEST_PREDICTION_PATH,
+    TRAIN_PATH,
     TRAIN_PREDICTION_PATH,
 )
 from tennis_predictor.helpers.data import open_df, save_df
@@ -34,17 +37,17 @@ def compute_kelly_criterion(df: pd.DataFrame):
 
 
 if __name__ == "__main__":
-    df_train = open_df(TRAIN_PREDICTION_PATH)
+    df_train = open_df(TRAIN_PATH)
     df_train = predict_winner(df_train)
     df_train = compute_kelly_criterion(df_train)
     save_df(df_train, TRAIN_PREDICTION_PATH)
 
-    df_dev = open_df(DEV_PREDICTION_PATH)
+    df_dev = open_df(DEV_PATH)
     df_dev = predict_winner(df_dev)
     df_dev = compute_kelly_criterion(df_dev)
     save_df(df_dev, DEV_PREDICTION_PATH)
 
-    df_test = open_df(TEST_PREDICTION_PATH)
+    df_test = open_df(TEST_PATH)
     df_test = predict_winner(df_test)
     df_test = compute_kelly_criterion(df_test)
     save_df(df_test, TEST_PREDICTION_PATH)
