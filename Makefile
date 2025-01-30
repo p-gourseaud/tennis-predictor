@@ -1,5 +1,5 @@
 make_database:
-	python src/tennis_predictor/data/pipelines/make_tennis_atp_database.py
+	python src/tennis_predictor/data/pipelines/make_tennis_atp_db.py
 	python src/tennis_predictor/data/pipelines/compute_elo.py
 	python src/tennis_predictor/data/pipelines/make_player_shortnames.py
 	python src/tennis_predictor/data/pipelines/join_player_odds.py
