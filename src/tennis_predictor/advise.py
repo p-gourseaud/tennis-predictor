@@ -65,6 +65,12 @@ def get_match_bet_recommandation(
         )
 
 
+def advise(player1, player2, odds1, odds2):
+    df_matches = pd.read_csv(JOINED_INTERIM_PATH, low_memory=False)
+    df_elo = pd.read_csv(ELO_INTERIM_PATH.format(surface_type="All"))
+    get_match_bet_recommandation(player1, player2, odds1, odds2, df_matches, df_elo)
+
+
 @click.command()
 @click.option("--player1", help="First player", required=True, type=str, prompt=True)
 @click.option("--player2", help="Second player", required=True, type=str, prompt=True)
@@ -74,11 +80,9 @@ def get_match_bet_recommandation(
 @click.option(
     "--odds2", help="Odds for the second player", required=True, type=float, prompt=True
 )
-def advise(player1, player2, odds1, odds2):
-    df_matches = pd.read_csv(JOINED_INTERIM_PATH, low_memory=False)
-    df_elo = pd.read_csv(ELO_INTERIM_PATH.format(surface_type="All"))
-    get_match_bet_recommandation(player1, player2, odds1, odds2, df_matches, df_elo)
+def advise_cli(player1, player2, odds1, odds2):
+    advise(player1, player2, odds1, odds2)
 
 
 if __name__ == "__main__":
-    advise()
+    advise_cli()
