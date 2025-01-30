@@ -53,7 +53,9 @@ def append_elo_row(row: pd.Series, dfs_elo: dict[int, pd.DataFrame]) -> None:
     loser_elo, loser_n_matches = (
         dfs_elo[loser_id].loc[:, ["elo", "n_matches"]].iloc[-1]
     )  # Get the last ELO score of the player
-    winner_new_elo, loser_new_elo = update_elo(winner_elo, loser_elo)
+    winner_new_elo, loser_new_elo = update_elo(
+        winner_elo, loser_elo, winner_n_matches, loser_n_matches
+    )
 
     dfs_elo[winner_id] = pd.concat(
         [
