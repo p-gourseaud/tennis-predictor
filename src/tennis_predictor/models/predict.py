@@ -14,9 +14,9 @@ from tennis_predictor.helpers.elo import estimate_winrate
 
 def predict_winner(df: pd.DataFrame):
     """Predict winner based on ELO."""
-    df["winner_estimated_winrate"] = df[["elo_winner", "elo_loser"]].apply(
-        lambda x: estimate_winrate(*x), axis=1
-    )
+    df["winner_estimated_winrate"] = df[
+        ["elo_surface_winner", "elo_surface_loser"]
+    ].apply(lambda x: estimate_winrate(*x), axis=1)
     df["loser_estimated_winrate"] = 1 - df["winner_estimated_winrate"]
     df["y"] = 1
     df["y_hat"] = (df["winner_estimated_winrate"] > 0.5).astype(int)
