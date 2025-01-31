@@ -70,37 +70,37 @@ def get_bankroll_sharpe_ratio(df) -> float:
 
 if __name__ == "__main__":
     df_train = open_df(TRAIN_PREDICTION_PATH)
-    df_train = compute_kelly_capital(df_train)
+    # df_train = compute_kelly_capital(df_train)
     save_df(df_train, TRAIN_EVALUATION_PATH)
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_train),
-        "log_loss": get_log_loss(df_train),
-        "mean_growth": get_bankroll_mean_growth(df_train),
-        "risk": get_bankroll_risk(df_train),
-        "sharpe_ratio": get_bankroll_sharpe_ratio(df_train),
+        # "log_loss": get_log_loss(df_train),
+        # "mean_growth": get_bankroll_mean_growth(df_train),
+        # "risk": get_bankroll_risk(df_train),
+        # "sharpe_ratio": get_bankroll_sharpe_ratio(df_train),
     }
     save_dict(evaluation_dict, TRAIN_SCORES_PATH)
 
     df_dev = open_df(DEV_PREDICTION_PATH)
-    df_dev = compute_kelly_capital(df_dev)
+    # df_dev = compute_kelly_capital(df_dev)
     save_df(df_dev, DEV_EVALUATION_PATH)
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_dev),
-        "log_loss": get_log_loss(df_dev),
-        "mean_growth": get_bankroll_mean_growth(df_dev),
-        "risk": get_bankroll_risk(df_dev),
-        "sharpe_ratio": get_bankroll_sharpe_ratio(df_dev),
+        # "log_loss": get_log_loss(df_dev),
+        # "mean_growth": get_bankroll_mean_growth(df_dev),
+        # "risk": get_bankroll_risk(df_dev),
+        # "sharpe_ratio": get_bankroll_sharpe_ratio(df_dev),
     }
     save_dict(evaluation_dict, DEV_SCORES_PATH)
 
     df_test = open_df(TEST_PREDICTION_PATH)
-    df_test = compute_kelly_capital(df_test)
+    # df_test = compute_kelly_capital(df_test)
     save_df(df_test, TEST_EVALUATION_PATH)
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_test),
-        "log_loss": get_log_loss(df_test),
-        "mean_growth": get_bankroll_mean_growth(df_test),
-        "risk": get_bankroll_risk(df_test),
-        "sharpe_ratio": get_bankroll_sharpe_ratio(df_test),
+        # "log_loss": get_log_loss(df_test),
+        # "mean_growth": get_bankroll_mean_growth(df_test),
+        # "risk": get_bankroll_risk(df_test),
+        # "sharpe_ratio": get_bankroll_sharpe_ratio(df_test),
     }
     save_dict(evaluation_dict, TEST_SCORES_PATH)
