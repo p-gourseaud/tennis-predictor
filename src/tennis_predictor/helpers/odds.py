@@ -1,3 +1,5 @@
+"""Helper functions to work with odds data."""
+
 import pandas as pd
 
 

@@ -1,3 +1,5 @@
+"""Helper functions to load and save data."""
+
 import json
 import sqlite3
 

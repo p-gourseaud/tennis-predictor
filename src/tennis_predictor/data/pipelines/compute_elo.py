@@ -1,3 +1,5 @@
+"""Script to compute the ELO scores for all players for all matches."""
+
 import pandas as pd
 
 from tennis_predictor.config.data import (

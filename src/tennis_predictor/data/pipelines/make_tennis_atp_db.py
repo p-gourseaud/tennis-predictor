@@ -1,3 +1,5 @@
+"""Run SQLite script to create the ATP database and move it to the interim folder."""
+
 import os
 import shutil
 import subprocess

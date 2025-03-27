@@ -1,3 +1,5 @@
+"""Join the rank and ELO of a player for a match according to the date."""
+
 import multiprocessing
 from functools import partial
 

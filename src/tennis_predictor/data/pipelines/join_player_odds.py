@@ -1,3 +1,5 @@
+"""Join the odds and players datasets."""
+
 import warnings
 
 import pandas as pd

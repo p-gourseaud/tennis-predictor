@@ -1,3 +1,5 @@
+"""Predict the winner of a tennis match based on ELO."""
+
 import pandas as pd
 
 from tennis_predictor.config.data import (

@@ -1,3 +1,5 @@
+"""Main module to advise on betting on a tennis match."""
+
 import click
 import pandas as pd
 
@@ -65,12 +67,14 @@ def get_match_bet_recommandation(
         )
 
 
+# Python function
 def advise(player1, player2, odds1, odds2):
     df_matches = pd.read_csv(JOINED_INTERIM_PATH, low_memory=False)
     df_elo = pd.read_csv(ELO_INTERIM_PATH.format(surface_type="All"))
     get_match_bet_recommandation(player1, player2, odds1, odds2, df_matches, df_elo)
 
 
+# Command line interface
 @click.command()
 @click.option("--player1", help="First player", required=True, type=str, prompt=True)
 @click.option("--player2", help="Second player", required=True, type=str, prompt=True)

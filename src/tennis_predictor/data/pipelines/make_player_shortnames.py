@@ -1,3 +1,8 @@
+"""Make shortNames for players, eg: Ludvig Aaes => Aaes L.
+
+Required for joining the player dataset with the odds dataset.
+"""
+
 import pandas as pd
 
 from tennis_predictor.config.data import PLAYERS_INTERIM_PATH
@@ -6,7 +11,7 @@ from tennis_predictor.helpers.odds import make_shortname
 
 
 def transform(df: pd.DataFrame) -> pd.DataFrame:
-    """Make shortNames for players: Ludvig Aaes => Aaes L."""
+    """Make shortNames for players, eg: Ludvig Aaes => Aaes L."""
     df = make_shortname(df)
     return df
 
