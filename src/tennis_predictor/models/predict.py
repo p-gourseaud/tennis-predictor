@@ -21,8 +21,8 @@ from tennis_predictor.config.data import (
 from tennis_predictor.helpers.data import open_df, save_df
 
 
-def predict_winner(df: pd.DataFrame):
-    """Predict winner with XGBoost model."""
+def preprocess(df: pd.DataFrame):
+    """Preprocess the data."""
     X = df[FEATURES]
     # One-hot encode the categorical features
     with open(ENCODER_PATH, "rb") as f:
@@ -41,7 +41,12 @@ def predict_winner(df: pd.DataFrame):
     with open(MEDIAN_PATH, "rb") as f:
         medians = pickle.load(f)
     X_filled = X_encoded.fillna(medians)
+    return X_filled
 
+
+def predict_winner(df: pd.DataFrame):
+    """Predict winner with XGBoost model."""
+    X_filled = preprocess(df)
     xgb_model = xgb.XGBClassifier()
     xgb_model.load_model(MODEL_PATH)
     y_pred = xgb_model.predict(X_filled)

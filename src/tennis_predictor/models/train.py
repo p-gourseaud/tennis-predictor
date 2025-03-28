@@ -1,7 +1,6 @@
 """Train the model."""
 
 import pickle
-from dataclasses import asdict
 
 import pandas as pd
 import xgboost as xgb
@@ -15,7 +14,7 @@ from tennis_predictor.config.data import (
     MODEL_PATH,
     TRAIN_AUGMENTED_PATH,
 )
-from tennis_predictor.config.parameters import BestHyperParameters
+from tennis_predictor.config.parameters import BEST_HYPER_PARAMETERS
 from tennis_predictor.helpers.data import open_df
 
 
@@ -85,7 +84,8 @@ def grid_search(X_train, y_train, X_dev, y_dev):
 def train_model(X_train, y_train):
     # Define the XGBoost model
     xgb_model = xgb.XGBClassifier(
-        eval_metric="logloss", **asdict(BestHyperParameters())
+        eval_metric="logloss",
+        **BEST_HYPER_PARAMETERS,
     )
     # Train the model
     xgb_model.fit(X_train, y_train)
