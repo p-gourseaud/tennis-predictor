@@ -1,27 +1,54 @@
 """Predict the winner of a tennis match based on ELO."""
 
-import pandas as pd
+import pickle
 
+import pandas as pd
+import xgboost as xgb
+from sklearn.preprocessing import OneHotEncoder
+
+from tennis_predictor.config.columns import COLUMNS_TO_ENCODE, FEATURES
 from tennis_predictor.config.data import (
     DEV_PATH,
     DEV_PREDICTION_PATH,
+    ENCODER_PATH,
+    MEDIAN_PATH,
+    MODEL_PATH,
     TEST_PATH,
     TEST_PREDICTION_PATH,
     TRAIN_PATH,
     TRAIN_PREDICTION_PATH,
 )
 from tennis_predictor.helpers.data import open_df, save_df
-from tennis_predictor.helpers.elo import estimate_winrate
 
 
 def predict_winner(df: pd.DataFrame):
-    """Predict winner based on ELO."""
-    df["winner_estimated_winrate"] = df[["elo_winner", "elo_loser"]].apply(
-        lambda x: estimate_winrate(*x), axis=1
+    """Predict winner with XGBoost model."""
+    X = df[FEATURES]
+    # One-hot encode the categorical features
+    with open(ENCODER_PATH, "rb") as f:
+        encoder: OneHotEncoder = pickle.load(f)
+    # Create a DataFrame with the encoded columns
+    encoded_df = pd.DataFrame(
+        encoder.transform(X[COLUMNS_TO_ENCODE]),
+        columns=encoder.get_feature_names_out(COLUMNS_TO_ENCODE),
     )
+    # Concatenate the encoded columns with the original dataframe
+    X_encoded = pd.concat([X.drop(COLUMNS_TO_ENCODE, axis=1), encoded_df], axis=1)
+
+    features2 = sorted(set(FEATURES) - set(COLUMNS_TO_ENCODE) | set(encoded_df.columns))
+    X_encoded = X_encoded[features2]
+    # Fill missing values with the median
+    with open(MEDIAN_PATH, "rb") as f:
+        medians = pickle.load(f)
+    X_filled = X_encoded.fillna(medians)
+
+    xgb_model = xgb.XGBClassifier()
+    xgb_model.load_model(MODEL_PATH)
+    y_pred = xgb_model.predict(X_filled)
+    y_pred_proba = xgb_model.predict_proba(X_filled)
+    df["y_hat"] = y_pred
+    df["winner_estimated_winrate"] = y_pred_proba[:, 1]
     df["loser_estimated_winrate"] = 1 - df["winner_estimated_winrate"]
-    df["y"] = 1
-    df["y_hat"] = (df["winner_estimated_winrate"] > 0.5).astype(int)
     return df
 
 

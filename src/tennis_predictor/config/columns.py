@@ -1,0 +1,38 @@
+FEATURES_TUPLE = (
+    "Series",
+    "Court",
+    "Surface",
+    "Round",
+    "Best of",
+    "WTA",
+    "Tier",
+    "hand",
+    "hand_loser",
+    "rank_winner",
+    "points_winner",
+    "rank_loser",
+    "points_loser",
+    "elo_winner",
+    "elo_surface_winner",
+    "elo_loser",
+    "elo_surface_loser",
+    "age",
+    "age_loser",
+    "home",
+    "home_loser",
+    "elo_prob",
+    "elo_surface_prob",
+)
+FEATURES = sorted(FEATURES_TUPLE)
+
+COLUMNS_TO_ENCODE_TUPLE = (
+    "Series",
+    "Court",
+    "Surface",
+    "Round",
+    "Best of",
+    "Tier",
+    "hand",
+    "hand_loser",
+)
+COLUMNS_TO_ENCODE = sorted(COLUMNS_TO_ENCODE_TUPLE)

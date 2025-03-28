@@ -38,6 +38,10 @@ DEV_PATH = "data/processed/dev.csv"
 TEST_PATH = "data/processed/test.csv"
 DEV_START_DATE = "2023-01-01"
 TEST_START_DATE = "2024-01-01"
+# # Models
+ENCODER_PATH = "models/encoder.pkl"
+MEDIAN_PATH = "models/medians.pkl"
+MODEL_PATH = "models/xgb_model.json"
 # # Prediction
 TRAIN_PREDICTION_PATH = "data/processed/train_predictions.csv"
 DEV_PREDICTION_PATH = "data/processed/dev_predictions.csv"
