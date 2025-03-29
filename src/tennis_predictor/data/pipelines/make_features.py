@@ -54,6 +54,31 @@ def get_country(df, df_country):
     return df
 
 
+def get_diff(df):
+    # Diff features
+    df["hand_diff"] = df["hand"].apply(lambda x: 1 if x == "L" else 0) - df[
+        "hand_loser"
+    ].apply(lambda x: 1 if x == "L" else 0)
+    df["rank_diff"] = df["rank_winner"] - df["rank_loser"]
+    df["points_diff"] = df["points_winner"] - df["points_loser"]
+    df["elo_diff"] = df["elo_winner"] - df["elo_loser"]
+    df["elo_surface_diff"] = df["elo_surface_winner"] - df["elo_surface_loser"]
+    df["age_diff"] = df["age"] - df["age_loser"]
+    df["home_diff"] = df["home"] - df["home_loser"]
+    df[
+        [
+            "hand_diff",
+            "rank_diff",
+            "points_diff",
+            "elo_diff",
+            "elo_surface_diff",
+            "age_diff",
+            "home_diff",
+        ]
+    ].fillna(0, inplace=True)
+    return df
+
+
 def get_elo_prob(df):
     df["elo_prob"] = df[["elo_winner", "elo_loser"]].apply(
         lambda x: estimate_winrate(*x), axis=1
@@ -71,10 +96,10 @@ def get_label(df):
 
 if __name__ == "__main__":
     df_country = open_df(TOURNAMENT_COUNTRY_PATH)
-
     df_features = open_df(JOINED_INTERIM_PATH)
     df_features = get_age(df_features)
     df_features = get_country(df_features, df_country)
+    df_features = get_diff(df_features)
     df_features = get_elo_prob(df_features)
     df_features = get_label(df_features)
     save_df(df_features, FEATURES_INTERIM_PATH)

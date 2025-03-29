@@ -22,6 +22,13 @@ FEATURES_TUPLE = (
     "home_loser",
     "elo_prob",
     "elo_surface_prob",
+    "hand_diff",
+    "rank_diff",
+    "points_diff",
+    "elo_diff",
+    "elo_surface_diff",
+    "age_diff",
+    "home_diff",
 )
 FEATURES = sorted(FEATURES_TUPLE)
 
