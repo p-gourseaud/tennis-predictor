@@ -17,6 +17,8 @@ from tennis_predictor.config.data import (
 from tennis_predictor.config.parameters import BEST_HYPER_PARAMETERS
 from tennis_predictor.helpers.data import open_df
 
+# FIXME: Use standard scaler
+
 
 def make_one_hot_encoding(df):
     """One-hot encode the categorical features."""
