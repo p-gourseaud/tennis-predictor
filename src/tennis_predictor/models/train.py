@@ -7,7 +7,7 @@ import xgboost as xgb
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import OneHotEncoder
 
-from tennis_predictor.config.columns import COLUMNS_TO_ENCODE, FEATURES
+from tennis_predictor.config.columns import COLUMNS_TO_ENCODE, FEATURES, Y
 from tennis_predictor.config.data import (
     ENCODER_PATH,
     MEDIAN_PATH,
@@ -95,7 +95,7 @@ def train_model(X_train, y_train):
 if __name__ == "__main__":
     df_train = open_df(TRAIN_AUGMENTED_PATH)
     X_train = df_train[FEATURES]
-    y_train = df_train["y"]
+    y_train = df_train[Y]
     X_train, encoder = make_one_hot_encoding(X_train)
     with open(ENCODER_PATH, "wb") as f:
         pickle.dump(encoder, f)

@@ -51,22 +51,22 @@ def predict_winner(df: pd.DataFrame):
     xgb_model.load_model(MODEL_PATH)
     y_pred = xgb_model.predict(X_filled)
     y_pred_proba = xgb_model.predict_proba(X_filled)
-    df["y_hat"] = y_pred
-    df["winner_estimated_winrate"] = y_pred_proba[:, 1]
-    df["loser_estimated_winrate"] = 1 - df["winner_estimated_winrate"]
+    df["P1_wins_prediction"] = y_pred
+    df["P1_estimated_winrate"] = y_pred_proba[:, 1]
+    df["P2_estimated_winrate"] = 1 - df["P1_estimated_winrate"]
     return df
 
 
 def compute_kelly_criterion(df: pd.DataFrame):
     """Compute the Kelly criterion."""
-    b = df["AvgW"] - 1
-    p = df["winner_estimated_winrate"]
+    b = df["P1_odds_Avg"] - 1
+    p = df["P1_estimated_winrate"]
     q = 1 - p
-    df["winner_kelly"] = (b * p - q) / b
+    df["P1_kelly"] = (b * p - q) / b
 
-    b = df["AvgL"] - 1
+    b = df["P2_odds_Avg"] - 1
     p, q = q, p
-    df["loser_kelly"] = (b * p - q) / b
+    df["P2_kelly"] = (b * p - q) / b
     return df
 
 
