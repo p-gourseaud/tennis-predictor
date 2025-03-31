@@ -78,7 +78,7 @@ def join(df_odds: pd.DataFrame, df_players: pd.DataFrame) -> pd.DataFrame:
     # Return inner selection
     df_final = df_joined[
         (df_joined["_merge"] == "both") & (df_joined["_merge_winner"] == "both")
-    ].drop(columns=["_merge", "_merge_winner"])
+    ].drop(columns=["_merge", "_merge_winner", "shortName", "shortName_loser"])
     return df_final
 
 
