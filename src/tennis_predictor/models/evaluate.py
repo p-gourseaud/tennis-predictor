@@ -1,6 +1,9 @@
+"""Evaluation of the models."""
+
 import numpy as np
 from sklearn.metrics import accuracy_score, log_loss
 
+from tennis_predictor.config.columns import Y
 from tennis_predictor.config.data import (
     DEV_EVALUATION_PATH,
     DEV_PREDICTION_PATH,
@@ -16,11 +19,11 @@ from tennis_predictor.helpers.data import open_df, save_df, save_dict
 
 
 def get_accuracy_score(df) -> float:
-    return accuracy_score(df["y"], df["y_hat"])
+    return accuracy_score(df[Y], df["P1_wins_prediction"])
 
 
 def get_log_loss(df) -> float:
-    return log_loss(df["y"], df["winner_estimated_winrate"], labels=[0, 1])
+    return log_loss(df[Y], df["P1_estimated_winrate"], labels=[0, 1])
 
 
 def compute_kelly_capital(df):
@@ -31,11 +34,11 @@ def compute_kelly_capital(df):
     capitals = []
 
     for row in df.iterrows():
-        winner_kelly, loser_kelly = row[1][["winner_kelly", "loser_kelly"]]
+        winner_kelly, loser_kelly = row[1][["P1_kelly", "P2_kelly"]]
         if winner_kelly > 0:
             # Pari gagnant
             bet = capital * winner_kelly  # min(capital * winner_kelly, MAX_BET)
-            capital += bet * (row[1]["AvgW"] - 1)
+            capital += bet * (row[1]["P1_odds_Avg"] - 1)
         elif loser_kelly > 0:
             # Pari perdant, on ne perd que la mise
             bet = capital * loser_kelly  # min(capital * loser_kelly, MAX_BET)

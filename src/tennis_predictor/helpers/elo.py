@@ -1,3 +1,5 @@
+"""ELO rating system for tennis."""
+
 K: int = 32  # ELO update constant
 BASE_ELO: float = 1500.0  # Initial ELO score
 SPREAD_ELO: int = 400  # ELO update constant

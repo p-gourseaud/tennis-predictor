@@ -1,3 +1,5 @@
+"""Main module to advise on betting on a tennis match."""
+
 import click
 import pandas as pd
 
@@ -40,13 +42,14 @@ def get_match_bet_recommandation(
     df_matches: pd.DataFrame,
     df_elo: pd.DataFrame,
 ) -> None:
+    # FIXME: Bet with XGBoost model
     id_player1 = get_id_player(player1, df_matches)
     id_player2 = get_id_player(player2, df_matches)
 
     elo1 = get_latest_elo_player(id_player1, df_elo)
     elo2 = get_latest_elo_player(id_player2, df_elo)
 
-    p = estimate_winrate(elo1, elo2)
+    p = estimate_winrate(elo1, elo2)  # FIXME: Use XGBoost model
     print(f"{player1} has a {p*100:.1f}% estimated winrate.")
 
     b = odds1 - 1
@@ -65,12 +68,22 @@ def get_match_bet_recommandation(
         )
 
 
+# Python function
 def advise(player1, player2, odds1, odds2):
+    """Advise on betting on a tennis match. Uses ELO ratings to estimate winrate.
+    Args:
+        player1 (str): First player name like "Nadal R."
+        player2 (str): Second player name like "Djokovic N."
+        odds1 (float): Odds for the first player
+        odds2 (float): Odds for the second player
+    """
+    # FIXME: Advise with XGBoost model
     df_matches = pd.read_csv(JOINED_INTERIM_PATH, low_memory=False)
     df_elo = pd.read_csv(ELO_INTERIM_PATH.format(surface_type="All"))
     get_match_bet_recommandation(player1, player2, odds1, odds2, df_matches, df_elo)
 
 
+# Command line interface
 @click.command()
 @click.option("--player1", help="First player", required=True, type=str, prompt=True)
 @click.option("--player2", help="Second player", required=True, type=str, prompt=True)

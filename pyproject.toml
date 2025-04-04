@@ -7,13 +7,14 @@ authors = [
 ]
 license = { text = "MIT" }
 dependencies = [
-    "click==8.1.8",
+    "click>=8.1.8",
     "numpy>=2.2.1",
     "openpyxl>=3.1.5",
     "pandas>=2.2.3",
     "scikit-learn>=1.6.1",
     "scipy>=1.15.1",
     "tqdm>=4.67.1",
+    "xgboost>=2.1.4",
     "xlrd>=2.0.1",
 ]
 

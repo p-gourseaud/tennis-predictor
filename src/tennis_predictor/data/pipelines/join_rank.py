@@ -1,3 +1,5 @@
+"""Join the rank and ELO of a player for a match according to the date."""
+
 import multiprocessing
 from functools import partial
 
@@ -8,7 +10,7 @@ from tennis_predictor.config.data import (
     JOINED_INTERIM_PATH,
     ODDS_INTERIM_PATH,
 )
-from tennis_predictor.helpers.data import open_db, open_df, save_df
+from tennis_predictor.helpers.data import open_df, save_df  # open_db
 
 
 def filter_rank(df_ranks: pd.DataFrame) -> pd.DataFrame:
@@ -185,9 +187,10 @@ def join_elo(
 
 if __name__ == "__main__":
     df_odds = open_df(ODDS_INTERIM_PATH)
-    df_rank = open_db("SELECT * FROM ranking")
-    df_rank = filter_rank(df_rank)
-    df_joined = join_rank(df_odds, df_rank)
+    # FIXME: Ranks and points are redundant in the dataset but are not exactly the same: investigate
+    # df_rank = open_db("SELECT * FROM ranking")
+    # df_rank = filter_rank(df_rank)
+    # df_joined = join_rank(df_odds, df_rank)
 
     df_elo = open_elo("all")
     df_elo_carpet = open_elo("carpet")
@@ -195,6 +198,6 @@ if __name__ == "__main__":
     df_elo_grass = open_elo("grass")
     df_elo_hard = open_elo("hard")
     df_joined = join_elo(
-        df_joined, df_elo, df_elo_carpet, df_elo_clay, df_elo_grass, df_elo_hard
+        df_odds, df_elo, df_elo_carpet, df_elo_clay, df_elo_grass, df_elo_hard
     )
     save_df(df_joined, JOINED_INTERIM_PATH)
