@@ -63,12 +63,11 @@ def get_bankroll_mean_growth(df) -> float:
 
 
 def get_bankroll_risk(df) -> float:
-    return df["growth"].std()
+    return np.log(df["growth"]).std()
 
 
 def get_bankroll_sharpe_ratio(df) -> float:
-    # FIXME: Check if the formula is correct
-    return (df["growth"].mean() - 1) / df["growth"].std()
+    return (get_bankroll_mean_growth(df) - 1) / get_bankroll_risk(df)
 
 
 if __name__ == "__main__":
@@ -78,9 +77,9 @@ if __name__ == "__main__":
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_train),
         "log_loss": get_log_loss(df_train),
-        "mean_growth": get_bankroll_mean_growth(df_train),
+        "edge": get_bankroll_mean_growth(df_train) - 1,
         "risk": get_bankroll_risk(df_train),
-        "sharpe_ratio": get_bankroll_sharpe_ratio(df_train),
+        "signal_to_noise_ratio": get_bankroll_sharpe_ratio(df_train),
     }
     save_dict(evaluation_dict, TRAIN_SCORES_PATH)
 
@@ -90,9 +89,9 @@ if __name__ == "__main__":
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_dev),
         "log_loss": get_log_loss(df_dev),
-        "mean_growth": get_bankroll_mean_growth(df_dev),
+        "edge": get_bankroll_mean_growth(df_dev) - 1,
         "risk": get_bankroll_risk(df_dev),
-        "sharpe_ratio": get_bankroll_sharpe_ratio(df_dev),
+        "signal_to_noise_ratio": get_bankroll_sharpe_ratio(df_dev),
     }
     save_dict(evaluation_dict, DEV_SCORES_PATH)
 
@@ -102,8 +101,8 @@ if __name__ == "__main__":
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_test),
         "log_loss": get_log_loss(df_test),
-        "mean_growth": get_bankroll_mean_growth(df_test),
+        "edge": get_bankroll_mean_growth(df_test) - 1,
         "risk": get_bankroll_risk(df_test),
-        "sharpe_ratio": get_bankroll_sharpe_ratio(df_test),
+        "signal_to_noise_ratio": get_bankroll_sharpe_ratio(df_test),
     }
     save_dict(evaluation_dict, TEST_SCORES_PATH)
