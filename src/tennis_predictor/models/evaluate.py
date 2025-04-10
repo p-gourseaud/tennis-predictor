@@ -22,6 +22,10 @@ def get_accuracy_score(df) -> float:
     return accuracy_score(df[Y], df["P1_wins_prediction"])
 
 
+def get_brier_score(df) -> float:
+    return ((df[Y] - df["P1_estimated_winrate"]) ** 2).mean()
+
+
 def get_log_loss(df) -> float:
     return log_loss(df[Y], df["P1_estimated_winrate"], labels=[0, 1])
 
@@ -77,6 +81,7 @@ if __name__ == "__main__":
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_train),
         "log_loss": get_log_loss(df_train),
+        "brier_score": get_brier_score(df_train),
         "edge": get_bankroll_mean_growth(df_train) - 1,
         "risk": get_bankroll_risk(df_train),
         "signal_to_noise_ratio": get_bankroll_sharpe_ratio(df_train),
@@ -89,6 +94,7 @@ if __name__ == "__main__":
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_dev),
         "log_loss": get_log_loss(df_dev),
+        "brier_score": get_brier_score(df_dev),
         "edge": get_bankroll_mean_growth(df_dev) - 1,
         "risk": get_bankroll_risk(df_dev),
         "signal_to_noise_ratio": get_bankroll_sharpe_ratio(df_dev),
@@ -101,6 +107,7 @@ if __name__ == "__main__":
     evaluation_dict = {
         "accuracy_score": get_accuracy_score(df_test),
         "log_loss": get_log_loss(df_test),
+        "brier_score": get_brier_score(df_test),
         "edge": get_bankroll_mean_growth(df_test) - 1,
         "risk": get_bankroll_risk(df_test),
         "signal_to_noise_ratio": get_bankroll_sharpe_ratio(df_test),
